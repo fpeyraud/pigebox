@@ -371,7 +371,7 @@ class ImageBuilder < Rake::TaskLib
       # TODO use a debian package
       chroot do |chroot|
         chroot.apt_install %w{rubygems ruby-dev build-essential rake libasound2 libsndfile1 libdaemons-ruby1.8 libffi-dev}
-        chroot.sudo "ln -fs /usr/bin/rake1.8 /usr/bin/rake"
+        chroot.sudo "ln -fs /usr/bin/rake /usr/bin/rake1.8"
         
         chroot.gem_install %w{ffi bones newgem cucumber SyslogLogger daemons}
         chroot.gem_install "albanpeignier-alsa-backup", :source => "http://gems.github.com"
@@ -394,8 +394,10 @@ class ImageBuilder < Rake::TaskLib
       mkdir "/usr/share/pige/bin"
       install "/usr/share/pige/bin/", "pige/pige-cron"
       install "/etc/cron.d/pige", "pige/pige.cron.d"
-      chroot.sudo "chown root:audio /srv/pige"
-      chroot.sudo "chmod g+w /srv/pige"
+      chroot do |chroot|
+        chroot.sudo "chown root:audio /srv/pige"
+        chroot.sudo "chmod g+w /srv/pige"
+      end
     end
     
     configure :http do
