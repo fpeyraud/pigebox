@@ -394,6 +394,8 @@ class ImageBuilder < Rake::TaskLib
       mkdir "/usr/share/pige/bin"
       install "/usr/share/pige/bin/", "pige/pige-cron"
       install "/etc/cron.d/pige", "pige/pige.cron.d"
+      chroot.sudo "chown root:audio /srv/pige"
+      chroot.sudo "chmod g+w /srv/pige"
     end
     
     configure :http do
